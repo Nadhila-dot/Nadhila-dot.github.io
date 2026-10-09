@@ -8,9 +8,9 @@
   "$format": 1,
   "description": "Basic telementary after deployment.",
   "data": {
-    "sha256": "c2a096520a41820e79d19471119b673a2d74bc8b100d75b57e13ffebdbc8657d",
+    "sha256": "d98e530b6f550ca2e7d478c717c0764c4c4cca1fe15d7cb7834849c7c248da4a",
     "opt:message": "updated",
-    "last_update": "2026-10-08T17:24:40.565Z",
-    "opt:version": "1.2"
+    "last_update": "2026-10-09T03:26:37.972Z",
+    "opt:version": ""
   }
 }
