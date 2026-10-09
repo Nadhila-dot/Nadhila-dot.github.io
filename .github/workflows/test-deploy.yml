@@ -1,7 +1,7 @@
 name: Validate static Fumadocs site
 on:
   push:
-    branches-ignore: [gh-pages]
+    branches-ignore: [main, gh-pages]
   pull_request:
     branches: [main, development]
   workflow_dispatch:
