@@ -22,6 +22,7 @@ jobs:
       - uses: actions/configure-pages@v5
       - run: bun install --frozen-lockfile
       - run: bun run typecheck
+      - run: bun test tests/api-examples.test.ts
       - run: bun run build
       - run: bun scripts/audit-headings.ts
       - run: bun scripts/verify-export.ts
