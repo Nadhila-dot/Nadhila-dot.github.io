@@ -1,25 +1,44 @@
-name: Deploy static Fumadocs site
+name: Build, test, and deploy GitHub Pages
 on:
   push:
     branches: [main]
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.4.2
+      - uses: actions/configure-pages@v5
       - run: bun install --frozen-lockfile
+      - run: bun run typecheck
       - run: bun run build
       - run: bun scripts/audit-headings.ts
       - run: bun scripts/verify-export.ts
-      - uses: peaceiris/actions-gh-pages@v3
+      - run: bun test tests/static-site.test.ts
+      - name: Use the GitHub Pages domain for this preview
+        if: github.repository == 'Nadhila-dot/Nadhila-dot.github.io'
+        run: rm -f out/CNAME
+      - uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
-          user_name: github-actions[bot]
-          user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          path: out
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
